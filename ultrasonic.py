@@ -14,23 +14,30 @@ pulse_start = 0
 GPIO.setup(TRIG, GPIO.OUT)
 GPIO.setup(ECHO, GPIO.IN)
 
-GPIO.output(TRIG, False)
-time.sleep(2)
+try:
+    while True:
+        GPIO.output(TRIG, False)
+        time.sleep(2)
 
-GPIO.output(TRIG, True)
-time.sleep(0.00001) # trigger pulse for 10micro seconds
-GPIO.output(TRIG, False)
+        GPIO.output(TRIG, True)
+        time.sleep(0.00001) # trigger pulse for 10micro seconds
+        GPIO.output(TRIG, False)
 
+        print("TRIG pulse sent")
 
-while GPIO.input(ECHO) == 0:
-    pulse_start = time.time()
+        print("while ECHO low")
+        while GPIO.input(ECHO) == 0:
+            pulse_start = time.time()
 
-while GPIO.input(ECHO) == 1:
-    pulse_end = time.time()
+        print("while ECHO high")
+        while GPIO.input(ECHO) == 1:
+            pulse_end = time.time()
 
+        print("calculating distance to object")
+        pulse_duration = pulse_end - pulse_start    
 
-pulse_duration = pulse_end - pulse_start    
+        distance = (pulse_duration * 34000) /  2
 
-distance = (pulse_duration * 34000) /  2
-
-print(f"Distance to object {distance:.2f}")
+        print(f"Distance to object {distance:.2f}")
+except KeyboardInterrupt:
+    GPIO.cleanup()
