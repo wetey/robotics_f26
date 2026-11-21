@@ -3,8 +3,7 @@ import time
 PIR_PIN = 23
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(PIR_PIN, GPIO.IN)
-time.sleep(60)
-motion_active = False
+time.sleep(30)
 try:
     while True:
         if GPIO.input(PIR_PIN) == GPIO.HIGH:
